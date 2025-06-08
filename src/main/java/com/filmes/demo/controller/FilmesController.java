@@ -33,7 +33,7 @@ public class FilmesController {
     }
 
     // ✅ Listar todos os filmes
-    @GetMapping
+    @GetMapping("/listar")
     public ResponseEntity<List<FilmesDTO>> listarTodos() {
         List<FilmesDTO> filmes = filmesService.findAll();
         return ResponseEntity.ok(filmes);
