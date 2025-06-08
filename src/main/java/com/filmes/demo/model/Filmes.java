@@ -23,15 +23,20 @@ public class Filmes {
     @Column(name = "dt_data")
     private Integer dataCriacao;
 
+    // Coluna para armazenar imagem codificada em Base64
+    @Column(name = "te_imagem_base64", columnDefinition = "TEXT")
+    private String imagemBase64;
+
     public Filmes() {
     }
 
-    public Filmes(Long id, String titulo, int tempo, String descricao, int dataCriacao) {
+    public Filmes(Long id, String titulo, int tempo, String descricao, Integer dataCriacao, String imagemBase64) {
         this.id = id;
         this.titulo = titulo;
         this.tempo = tempo;
         this.descricao = descricao;
         this.dataCriacao = dataCriacao;
+        this.imagemBase64 = imagemBase64;
     }
 
     public Long getId() {
@@ -74,14 +79,18 @@ public class Filmes {
         this.dataCriacao = dataCriacao;
     }
 
+    public String getImagemBase64() {
+        return imagemBase64;
+    }
+
+    public void setImagemBase64(String imagemBase64) {
+        this.imagemBase64 = imagemBase64;
+    }
+
     @Override
     public String toString() {
-        return "Filmes{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", tempo=" + tempo +
-                ", descricao='" + descricao + '\'' +
-                ", dataCriacao=" + dataCriacao +
-                '}';
+        return "Filmes [id=" + id + ", titulo=" + titulo + ", tempo=" + tempo +
+                ", descricao=" + descricao + ", dataCriacao=" + dataCriacao +
+                ", imagemBase64=" + (imagemBase64 != null ? "[BASE64_STRING_TRUNCADA]" : null) + "]";
     }
 }

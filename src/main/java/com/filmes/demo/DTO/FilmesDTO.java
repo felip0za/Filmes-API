@@ -8,6 +8,7 @@ public class FilmesDTO {
     private int tempo;
     private String descricao;
     private Integer dataCriacao;
+    private String imagemBase64;
 
     // Construtor padrão necessário para o Jackson desserializar
     public FilmesDTO() {
@@ -20,6 +21,7 @@ public class FilmesDTO {
         this.tempo = filmes.getTempo();
         this.descricao = filmes.getDescricao();
         this.dataCriacao = filmes.getDataCriacao();
+        this.imagemBase64 = filmes.getImagemBase64();
     }
 
     // Getters e Setters
@@ -61,5 +63,13 @@ public class FilmesDTO {
 
     public void setDataCriacao(Integer dataCriacao) {
         this.dataCriacao = dataCriacao;
+    }
+
+    public String getImagemBase64() {
+        return imagemBase64;
+    }
+
+    public void setImagemBase64(String imagemBase64) {
+        this.imagemBase64 = imagemBase64;
     }
 }

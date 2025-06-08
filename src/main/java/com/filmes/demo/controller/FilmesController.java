@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/filmes")
+@CrossOrigin(origins = "*") // Caso esteja consumindo via frontend local
 public class FilmesController {
 
     private final FilmesService filmesService;
@@ -17,7 +18,7 @@ public class FilmesController {
         this.filmesService = filmesService;
     }
 
-    // ✅ Salvar filme
+    // ✅ Salvar novo filme (com imagem em base64)
     @PostMapping
     public ResponseEntity<FilmesDTO> salvar(@RequestBody FilmesDTO filmesDTO) {
         FilmesDTO salvo = filmesService.save(filmesDTO);
@@ -25,28 +26,28 @@ public class FilmesController {
     }
 
     // ✅ Buscar filme por ID
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<FilmesDTO> findById(@PathVariable Long id) {
         FilmesDTO dto = filmesService.findById(id);
         return ResponseEntity.ok(dto);
     }
 
     // ✅ Listar todos os filmes
-    @GetMapping("/listar")
+    @GetMapping
     public ResponseEntity<List<FilmesDTO>> listarTodos() {
         List<FilmesDTO> filmes = filmesService.findAll();
         return ResponseEntity.ok(filmes);
     }
 
-    // ✅ Atualizar filme
-    @PutMapping("{id}")
+    // ✅ Atualizar filme por ID
+    @PutMapping("/{id}")
     public ResponseEntity<FilmesDTO> atualizar(@PathVariable Long id, @RequestBody FilmesDTO filmesDTO) {
         FilmesDTO atualizado = filmesService.updateById(id, filmesDTO);
         return ResponseEntity.ok(atualizado);
     }
 
-    // ✅ Deletar filme
-    @DeleteMapping("{id}")
+    // ✅ Deletar filme por ID
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deletar(@PathVariable Long id) {
         filmesService.deleteById(id);
         return ResponseEntity.ok("Filme removido com sucesso!");

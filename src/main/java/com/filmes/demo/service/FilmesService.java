@@ -4,7 +4,6 @@ import com.filmes.demo.DTO.FilmesDTO;
 import com.filmes.demo.model.Filmes;
 import com.filmes.demo.repository.FilmesRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,49 +24,49 @@ public class FilmesService {
     @Transactional(readOnly = true)
     public FilmesDTO findById(Long id){
         Optional<Filmes> filmesOptional = filmesRepository.findById(id);
-        if (filmesOptional.isEmpty()) {
-            throw new RuntimeException("Time não encontrado com o ID: " + id);
-        }
-        return new FilmesDTO(filmesOptional.get());
+        Filmes filme = filmesOptional.orElseThrow(() -> new EntityNotFoundException("Filme não encontrado com o ID: " + id));
+        return new FilmesDTO(filme);
     }
 
     @Transactional(readOnly = true)
     public List<FilmesDTO> findAll() {
-        List<Filmes> filmesList = filmesRepository.findAll();
-        return filmesList.stream()
+        return filmesRepository.findAll()
+                .stream()
                 .map(FilmesDTO::new)
-                .toList();  // no Java 16+ toList(), para versões anteriores use collect(Collectors.toList())
+                .toList();
     }
+
     @Transactional
     public FilmesDTO save(FilmesDTO filmesDTO) {
         Filmes filmes = new Filmes();
-        BeanUtils.copyProperties(filmesDTO, filmes);
-        Filmes saved = filmesRepository.save(filmes);
-        return new FilmesDTO(saved);
+        copiarDadosDTOParaEntidade(filmesDTO, filmes);
+        Filmes salvo = filmesRepository.save(filmes);
+        return new FilmesDTO(salvo);
     }
 
     @Transactional
     public FilmesDTO updateById(Long id, FilmesDTO filmesDTO) {
-        // Buscar o time no banco de dados pelo nome
-        Optional<Filmes> optionalFilmes = filmesRepository.findById(id);
-
-        // Verificar se o time foi encontrado
-        Filmes existingFilmes = optionalFilmes.orElseThrow(() -> new EntityNotFoundException("Filme não encontrado com o id: " + id));
-
-        // Atualizar os campos do time com os dados do DTO
-        BeanUtils.copyProperties(filmesDTO, existingFilmes, "id");  // "id" não será copiado, para não sobrescrever o ID do time existente
-
-        // Salvar o time atualizado no banco de dados
-        Filmes updatedFilmes = filmesRepository.save(existingFilmes);
-
-        // Retornar o TimeDTO do time atualizado
-        return new FilmesDTO(updatedFilmes);
+        Filmes existente = filmesRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Filme não encontrado com o id: " + id));
+        copiarDadosDTOParaEntidade(filmesDTO, existente);
+        Filmes atualizado = filmesRepository.save(existente);
+        return new FilmesDTO(atualizado);
     }
 
     @Transactional
     public void deleteById(Long id) {
+        if (!filmesRepository.existsById(id)) {
+            throw new EntityNotFoundException("Filme não encontrado com o id: " + id);
+        }
         filmesRepository.deleteById(id);
     }
 
-
+    // ✅ Método auxiliar para copiar campos do DTO para a entidade
+    private void copiarDadosDTOParaEntidade(FilmesDTO dto, Filmes entidade) {
+        entidade.setTitulo(dto.getTitulo());
+        entidade.setTempo(dto.getTempo());
+        entidade.setDescricao(dto.getDescricao());
+        entidade.setDataCriacao(dto.getDataCriacao());
+        entidade.setImagemBase64(dto.getImagemBase64()); // Campo base64 da imagem
+    }
 }
