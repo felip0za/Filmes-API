@@ -3,7 +3,7 @@ package com.filmes.demo.DTO;
 import com.filmes.demo.model.Filmes;
 
 public class FilmesDTO {
-    private Long id;
+    private Integer id;
     private String titulo;
     private int tempo;
     private String descricao;
@@ -25,11 +25,11 @@ public class FilmesDTO {
     }
 
     // Getters e Setters
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

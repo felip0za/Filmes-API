@@ -9,7 +9,7 @@ public class Filmes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "te_titulo")
     private String titulo;
@@ -30,7 +30,7 @@ public class Filmes {
     public Filmes() {
     }
 
-    public Filmes(Long id, String titulo, int tempo, String descricao, Integer dataCriacao, String imagemBase64) {
+    public Filmes(Integer id, String titulo, int tempo, String descricao, Integer dataCriacao, String imagemBase64) {
         this.id = id;
         this.titulo = titulo;
         this.tempo = tempo;
@@ -39,11 +39,11 @@ public class Filmes {
         this.imagemBase64 = imagemBase64;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
